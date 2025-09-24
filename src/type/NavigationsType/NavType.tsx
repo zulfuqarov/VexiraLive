@@ -1,6 +1,7 @@
 
 export type RootHomeStackParaList = {
     HomeScreen: undefined;
+    WatchNawScreen: undefined;
 };
 
 export type RootProfileStackParaList = {
