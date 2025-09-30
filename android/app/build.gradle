@@ -80,7 +80,7 @@ android {
     namespace "com.vexiralive"
     defaultConfig {
         applicationId "com.vexiralive"
-        minSdkVersion rootProject.ext.minSdkVersion
+        minSdkVersion 26
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"

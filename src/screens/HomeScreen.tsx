@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, FlatList } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import SearchInput from '../Components/SearchInput'
 import ProfileButton from '../Components/ProfileButton'
 import Categorys from '../Components/Categorys'
 import VideoCard from '../Components/VideoCard'
 import PopularChanelCard from '../Components/PopularChanelCard'
-
+import { GetVideoCategories } from '../api/Requests/Video/Video'
 const channels: string[] = [
   "Rock", "World News", "Football Highlights", "Indie Movies",
   "Gaming Zone", "Tech Talks", "Around the World", "History Lessons",
@@ -16,6 +16,15 @@ const channels: string[] = [
 
 const HomeScreen = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const data = await GetVideoCategories();
+      console.log(data);
+    };
+
+    fetchCategories();
+  }, [])
 
   return (
     <View style={{ flex: 1 }}>
