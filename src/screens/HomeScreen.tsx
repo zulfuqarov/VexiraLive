@@ -1,30 +1,19 @@
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, FlatList } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 
 import SearchInput from '../Components/SearchInput'
 import ProfileButton from '../Components/ProfileButton'
 import Categorys from '../Components/Categorys'
 import VideoCard from '../Components/VideoCard'
 import PopularChanelCard from '../Components/PopularChanelCard'
-import { GetVideoCategories } from '../api/Requests/Video/Video'
-const channels: string[] = [
-  "Rock", "World News", "Football Highlights", "Indie Movies",
-  "Gaming Zone", "Tech Talks", "Around the World", "History Lessons",
-  "Lifestyle & Health", "Stand-up Comedy", "Jazz Classics", "Science Today",
-  "Cooking Secrets", "Travel Diaries", "Motivation"
-];
+import { useVideoCategories } from '../api/Quaries/Queries'
+import { VideoCategoryType } from '../type/ApiType/VideoType'
 
 const HomeScreen = () => {
+
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const { data: videoCategories, isLoading, isError } = useVideoCategories();
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const data = await GetVideoCategories();
-      console.log(data);
-    };
-
-    fetchCategories();
-  }, [])
 
   return (
     <View style={{ flex: 1 }}>
@@ -41,9 +30,9 @@ const HomeScreen = () => {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingHorizontal: 8 }}
         >
-          {channels.map((channel, index) => (
+          {videoCategories && videoCategories.map((channel: VideoCategoryType, index: number) => (
             <TouchableOpacity key={index} onPress={() => setActiveIndex(index)}>
-              <Categorys index={index} activ={activeIndex} name={channel} />
+              <Categorys index={index} activ={activeIndex} name={channel.category_name} />
             </TouchableOpacity>
           ))}
         </ScrollView>
