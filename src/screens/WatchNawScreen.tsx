@@ -84,6 +84,7 @@ const WatchNawScreen: React.FC = () => {
       <View style={{ height: height / 3 }}>
         {selectedUrl ? (
           <Video
+          key={selectedUrl}
             source={{ uri: selectedUrl }}
             style={{ width: "100%", height: "100%", backgroundColor: "black" }}
             controls

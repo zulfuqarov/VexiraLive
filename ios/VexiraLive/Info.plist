@@ -28,7 +28,7 @@
 		<dict>
 			<key>NSExceptionDomains</key>
 			<dict>
-				<key>nabi.autonex360.online</key>
+				<key>teammedia.pw</key>
 				<dict>
 					<key>NSExceptionAllowsInsecureHTTPLoads</key>
 					<true />
@@ -37,7 +37,7 @@
 				</dict>
 			</dict>
 			<key>NSAllowsArbitraryLoads</key>
-			<false />
+			<true />
 			<key>NSAllowsLocalNetworking</key>
 			<true />
 		</dict>
