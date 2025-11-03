@@ -13,11 +13,13 @@ import ProfileButton from '../Components/ProfileButton';
 import Categorys from '../Components/Categorys';
 import VideoCard from '../Components/VideoCard';
 import PopularChanelCard from '../Components/PopularChanelCard';
+
 import {
   useVideoCategories,
   useGetVideosByCategoryId,
 } from '../api/Quaries/Queries';
 import { VideoCategoryType } from '../type/ApiType/VideoType';
+import VideoCardSkeleton from '../Components/VideoCardSkeleton';
 
 const HomeScreen = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -82,6 +84,25 @@ const HomeScreen = () => {
               keyExtractor={item => item.num.toString()}
               contentContainerStyle={{ paddingHorizontal: 8, gap: 15 }}
               renderItem={({ item }) => <VideoCard item={item} />}
+              ListEmptyComponent={
+                isVideosLoading ? (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      gap: 15,
+                      paddingHorizontal: 8,
+                    }}
+                  >
+                    {[1, 2, 3, 4, 5].map(i => (
+                      <VideoCardSkeleton key={i} />
+                    ))}
+                  </View>
+                ) : (
+                  <View>
+                    <Text>no Video</Text>
+                  </View>
+                )
+              }
             />
 
             {/* Popular Channels Title */}
