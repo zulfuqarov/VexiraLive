@@ -4,13 +4,13 @@ import { VideoType } from '../type/ApiType/VideoType';
 
 type ChannelItem = {
   item: VideoType;
-  onPress: () => void;
+  setChangeStreamId: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
-const ChannelItem = ({ item, onPress }: ChannelItem) => {
+const ChannelItem = ({ item, setChangeStreamId }: ChannelItem) => {
   return (
     <TouchableOpacity
-      onPress={() => onPress()}
+      onPress={() => setChangeStreamId(item.stream_id)}
       activeOpacity={0.7}
       style={{
         flexDirection: 'row',

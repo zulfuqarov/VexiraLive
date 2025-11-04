@@ -23,12 +23,14 @@ const WatchNawScreen: React.FC = () => {
   const route = useRoute<WatchRouteProp>();
   const { stream_id, data } = route.params;
 
+  const [changeStreamId, setChangeStreamId] = useState<number | null>(null);
+
   return (
     <View style={{ flex: 1, backgroundColor: '#111827' }}>
       {/* Video Player */}
       <View style={{ height: height / 3 }}>
         {stream_id ? (
-          <VideoPlay stream_id={stream_id} />
+          <VideoPlay stream_id={changeStreamId ? changeStreamId : stream_id} />
         ) : (
           <View
             style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
@@ -54,10 +56,7 @@ const WatchNawScreen: React.FC = () => {
           data={data}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
-            <ChannelItem
-              item={item}
-              onPress={() => console.log('clik channel')}
-            />
+            <ChannelItem item={item} setChangeStreamId={setChangeStreamId} />
           )}
         />
       </View>
