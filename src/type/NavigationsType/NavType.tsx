@@ -1,19 +1,23 @@
+import { VideoType } from '../ApiType/VideoType';
 
 export type RootHomeStackParaList = {
-    HomeScreen: undefined;
-    WatchNawScreen: undefined;
+  HomeScreen: undefined;
+  WatchNawScreen: {
+    stream_id: number;
+    data: VideoType[] | undefined;
+  };
 };
 
 export type RootProfileStackParaList = {
-    ProfileScreen: undefined;
+  ProfileScreen: undefined;
 };
 
 export type RootSearchStackParaList = {
-    SearchScreen: undefined;
+  SearchScreen: undefined;
 };
 
 export type RootTabParamList = {
-    Home: undefined;
-    Profile: undefined;
-    Search: undefined;
+  Home: undefined;
+  Profile: undefined;
+  Search: undefined;
 };

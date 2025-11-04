@@ -20,16 +20,21 @@ import {
 } from '../api/Quaries/Queries';
 import { VideoCategoryType } from '../type/ApiType/VideoType';
 import VideoCardSkeleton from '../Components/VideoCardSkeleton';
+import { NoVideoPlaceholder } from '../Components/NoVideoPlaceholder';
 
 const HomeScreen = () => {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(0);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
-    null,
+    '1',
   );
 
   const { data: videoCategories, isLoading, isError } = useVideoCategories();
-  const { data: videosById, isLoading: isVideosLoading } =
-    useGetVideosByCategoryId(selectedCategoryId || '');
+  const {
+    data: videosById,
+    isLoading: isVideosLoading,
+    refetch: refetchVideoByCategory,
+    isFetching,
+  } = useGetVideosByCategoryId(selectedCategoryId || '');
 
   return (
     <View style={{ flex: 1 }}>
@@ -83,9 +88,11 @@ const HomeScreen = () => {
               data={videosById}
               keyExtractor={item => item.num.toString()}
               contentContainerStyle={{ paddingHorizontal: 8, gap: 15 }}
-              renderItem={({ item }) => <VideoCard item={item} />}
+              renderItem={({ item }) => (
+                <VideoCard videosByIdItem={videosById} item={item} />
+              )}
               ListEmptyComponent={
-                isVideosLoading ? (
+                isFetching ? (
                   <View
                     style={{
                       flexDirection: 'row',
@@ -98,9 +105,10 @@ const HomeScreen = () => {
                     ))}
                   </View>
                 ) : (
-                  <View>
-                    <Text>no Video</Text>
-                  </View>
+                  <NoVideoPlaceholder
+                    message="Seçilmiş kateqoriyada video tapılmadı. Başqa kateqoriyaya baxın və ya yenidən yoxlayın."
+                    onRetry={refetchVideoByCategory}
+                  />
                 )
               }
             />

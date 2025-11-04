@@ -7,10 +7,11 @@ import { RootHomeStackParaList } from '../type/NavigationsType/NavType';
 import { VideoType } from '../type/ApiType/VideoType';
 type VideoCardProps = {
   item: VideoType;
+  videosByIdItem: VideoType[] | undefined;
 };
 type HomeStackNavigationProp = NativeStackNavigationProp<RootHomeStackParaList>;
 
-const VideoCard = ({ item }: VideoCardProps) => {
+const VideoCard = ({ item, videosByIdItem }: VideoCardProps) => {
   const width = Dimensions.get('window').width;
   const heightImage = width * 0.3;
 
@@ -61,7 +62,12 @@ const VideoCard = ({ item }: VideoCardProps) => {
         </Text>
       </View>
       <CustomButton
-        onPress={() => navigation.navigate('WatchNawScreen')}
+        onPress={() =>
+          navigation.navigate('WatchNawScreen', {
+            stream_id: item.stream_id,
+            data: videosByIdItem,
+          })
+        }
         text="Watch Now"
       />
     </View>
