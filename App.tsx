@@ -6,7 +6,7 @@ import BottomNavigation from './src/Navigations/BottomNavigations/BottomNavigati
 import { NavigationContainer } from '@react-navigation/native';
 import BootSplash from 'react-native-bootsplash';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
-
+import { navigationRef } from './src/Navigations/Service/NavigationsService';
 import {
   QueryClient,
   QueryClientProvider,
@@ -23,6 +23,7 @@ function App() {
   return (
     <SafeAreaProvider>
       <NavigationContainer
+        ref={navigationRef}
         onReady={() => {
           BootSplash.hide({ fade: true });
         }}
