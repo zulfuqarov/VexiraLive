@@ -5,6 +5,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import BottomNavigation from './src/Navigations/BottomNavigations/BottomNavigation';
 import { NavigationContainer } from '@react-navigation/native';
 import BootSplash from 'react-native-bootsplash';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 import {
   QueryClient,
@@ -21,16 +22,19 @@ function App() {
 
   return (
     <SafeAreaProvider>
-      <StatusBar barStyle="default" backgroundColor="white" />
-
       <NavigationContainer
         onReady={() => {
           BootSplash.hide({ fade: true });
         }}
       >
-        <QueryClientProvider client={queryClient}>
-          <BottomNavigation />
-        </QueryClientProvider>
+        <KeyboardProvider
+          statusBarTranslucent={true}
+          navigationBarTranslucent={true}
+        >
+          <QueryClientProvider client={queryClient}>
+            <BottomNavigation />
+          </QueryClientProvider>
+        </KeyboardProvider>
       </NavigationContainer>
     </SafeAreaProvider>
   );

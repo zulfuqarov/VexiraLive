@@ -5,6 +5,8 @@ import {
   ScrollView,
   TouchableOpacity,
   FlatList,
+  RefreshControl,
+  Alert,
 } from 'react-native';
 import React, { useState } from 'react';
 
@@ -17,10 +19,12 @@ import PopularChanelCard from '../Components/PopularChanelCard';
 import {
   useVideoCategories,
   useGetVideosByCategoryId,
+  useGetVideoAll,
 } from '../api/Quaries/Queries';
 import { VideoCategoryType } from '../type/ApiType/VideoType';
 import VideoCardSkeleton from '../Components/VideoCardSkeleton';
 import { NoVideoPlaceholder } from '../Components/NoVideoPlaceholder';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 const HomeScreen = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(0);
@@ -35,6 +39,12 @@ const HomeScreen = () => {
     refetch: refetchVideoByCategory,
     isFetching,
   } = useGetVideosByCategoryId(selectedCategoryId || '');
+
+  const {
+    data: populatTopVideo,
+    isLoading: isPopularVideoLoading,
+    refetch,
+  } = useGetVideoAll();
 
   return (
     <View style={{ flex: 1 }}>
@@ -76,68 +86,80 @@ const HomeScreen = () => {
             ))}
         </ScrollView>
       </View>
-
-      {/* Main Content */}
-      <FlatList
-        ListHeaderComponent={
-          <>
-            {/* Horizontal Video Cards */}
-            <FlatList
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              data={videosById}
-              keyExtractor={item => item.num.toString()}
-              contentContainerStyle={{ paddingHorizontal: 8, gap: 15 }}
-              renderItem={({ item }) => (
-                <VideoCard videosByIdItem={videosById} item={item} />
-              )}
-              ListEmptyComponent={
-                isFetching ? (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      gap: 15,
-                      paddingHorizontal: 8,
-                    }}
-                  >
-                    {[1, 2, 3, 4, 5].map(i => (
-                      <VideoCardSkeleton key={i} />
-                    ))}
-                  </View>
-                ) : (
-                  <NoVideoPlaceholder
-                    message="Seçilmiş kateqoriyada video tapılmadı. Başqa kateqoriyaya baxın və ya yenidən yoxlayın."
-                    onRetry={refetchVideoByCategory}
-                  />
-                )
-              }
-            />
-
-            {/* Popular Channels Title */}
-            <Text
-              style={{
-                color: 'white',
-                fontSize: 22,
-                fontWeight: '700',
-                marginTop: 20,
-                marginLeft: 10,
-                fontFamily: 'PlusJakartaSans-Bold',
-                marginBottom: 15,
-              }}
-            >
-              Popular Channels
-            </Text>
-          </>
+      <KeyboardAwareScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={isPopularVideoLoading}
+            onRefresh={async () => await refetch()}
+          />
         }
-        data={[1, 2, 3, 4]}
-        numColumns={2}
-        keyExtractor={(item, index) => index.toString()}
-        columnWrapperStyle={{
-          justifyContent: 'space-between',
-          marginBottom: 10,
-        }}
-        renderItem={({ item }) => null}
-      />
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Main Content */}
+        <FlatList
+          scrollEnabled={false}
+          ListHeaderComponent={
+            <>
+              {/* Horizontal Video Cards */}
+              <FlatList
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                data={videosById}
+                keyExtractor={item => item.num.toString()}
+                contentContainerStyle={{ paddingHorizontal: 8, gap: 15 }}
+                renderItem={({ item }) => (
+                  <VideoCard videosByIdItem={videosById} item={item} />
+                )}
+                ListEmptyComponent={
+                  isFetching ? (
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        gap: 15,
+                        paddingHorizontal: 8,
+                      }}
+                    >
+                      {[1, 2, 3, 4, 5].map(i => (
+                        <VideoCardSkeleton key={i} />
+                      ))}
+                    </View>
+                  ) : (
+                    <NoVideoPlaceholder
+                      message="Seçilmiş kateqoriyada video tapılmadı. Başqa kateqoriyaya baxın və ya yenidən yoxlayın."
+                      onRetry={refetchVideoByCategory}
+                    />
+                  )
+                }
+              />
+
+              {/* Popular Channels Title */}
+              <Text
+                style={{
+                  color: 'white',
+                  fontSize: 22,
+                  fontWeight: '700',
+                  marginTop: 20,
+                  marginLeft: 10,
+                  fontFamily: 'PlusJakartaSans-Bold',
+                  marginBottom: 15,
+                }}
+              >
+                Popular Channels
+              </Text>
+            </>
+          }
+          data={populatTopVideo}
+          numColumns={2}
+          keyExtractor={item => item.num.toString()}
+          columnWrapperStyle={{
+            justifyContent: 'space-between',
+            marginBottom: 10,
+          }}
+          renderItem={({ item }) => (
+            <PopularChanelCard videosByIdItem={videosById} item={item} />
+          )}
+        />
+      </KeyboardAwareScrollView>
     </View>
   );
 };

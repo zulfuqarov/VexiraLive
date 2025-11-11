@@ -2,9 +2,11 @@ import { useQuery } from '@tanstack/react-query';
 import {
   GetVideoCategories,
   GetVideosByCategoryId,
+  GetAllVideos,
 } from '../Requests/Video/Video';
 
 import { VideoCategoryType, VideoType } from '../../type/ApiType/VideoType';
+
 const useVideoCategories = () => {
   return useQuery<VideoCategoryType[]>({
     queryKey: ['videoCategories'],
@@ -19,4 +21,18 @@ const useGetVideosByCategoryId = (categoryId: string) => {
   });
 };
 
-export { useVideoCategories, useGetVideosByCategoryId };
+const useGetVideoAll = () => {
+  return useQuery<VideoType[]>({
+    queryKey: ['VideoAll'],
+    queryFn: async () => {
+      const allVideos = await GetAllVideos();
+
+      const shuffled = allVideos.sort(() => 0.5 - Math.random());
+      const randomTen = shuffled.slice(0, 10);
+
+      return randomTen;
+    },
+  });
+};
+
+export { useVideoCategories, useGetVideosByCategoryId, useGetVideoAll };
