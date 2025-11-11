@@ -27,6 +27,8 @@ import { NoVideoPlaceholder } from '../Components/NoVideoPlaceholder';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 
 const HomeScreen = () => {
+  const [isPopularVideoLoading, setIsPopularVideoLoading] =
+    useState<boolean>(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(0);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
     '1',
@@ -40,11 +42,7 @@ const HomeScreen = () => {
     isFetching,
   } = useGetVideosByCategoryId(selectedCategoryId || '');
 
-  const {
-    data: populatTopVideo,
-    isLoading: isPopularVideoLoading,
-    refetch,
-  } = useGetVideoAll();
+  const { data: populatTopVideo, refetch } = useGetVideoAll();
 
   return (
     <View style={{ flex: 1 }}>
@@ -90,7 +88,16 @@ const HomeScreen = () => {
         refreshControl={
           <RefreshControl
             refreshing={isPopularVideoLoading}
-            onRefresh={async () => await refetch()}
+            onRefresh={async () => {
+              setIsPopularVideoLoading(true);
+              try {
+                await refetch();
+              } catch (error) {
+                console.log(error);
+              } finally {
+                setIsPopularVideoLoading(false);
+              }
+            }}
           />
         }
         showsVerticalScrollIndicator={false}
@@ -156,7 +163,7 @@ const HomeScreen = () => {
             marginBottom: 10,
           }}
           renderItem={({ item }) => (
-            <PopularChanelCard videosByIdItem={videosById} item={item} />
+            <PopularChanelCard videosByIdItem={populatTopVideo} item={item} />
           )}
         />
       </KeyboardAwareScrollView>

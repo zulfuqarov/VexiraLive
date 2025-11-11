@@ -48,7 +48,7 @@ const PopularChanelCard = ({ item, videosByIdItem }: VideoCardProps) => {
             fontFamily: 'PlusJakartaSans-Bold',
           }}
         >
-          Test
+          {item.name}
         </Text>
       </View>
     </TouchableOpacity>
