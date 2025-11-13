@@ -25,6 +25,7 @@ import { VideoCategoryType } from '../type/ApiType/VideoType';
 import VideoCardSkeleton from '../Components/VideoCardSkeleton';
 import { NoVideoPlaceholder } from '../Components/NoVideoPlaceholder';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
+import Header from '../Components/Header';
 
 const HomeScreen = () => {
   const [isPopularVideoLoading, setIsPopularVideoLoading] =
@@ -46,19 +47,7 @@ const HomeScreen = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      {/* Header */}
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: 10,
-        }}
-      >
-        <SearchInput />
-        <ProfileButton />
-      </View>
-
+      <Header SearchInputShow={true} />
       {/* Channel Categories */}
       <View style={{ marginVertical: 10 }}>
         <ScrollView

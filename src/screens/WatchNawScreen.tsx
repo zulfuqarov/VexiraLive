@@ -14,6 +14,7 @@ import { useRoute, RouteProp } from '@react-navigation/native';
 import { RootHomeStackParaList } from '../type/NavigationsType/NavType';
 import VideoPlay from '../Components/VideoPlay';
 import ChannelItem from '../Components/ChannelItem';
+import Header from '../Components/Header';
 
 type WatchRouteProp = RouteProp<RootHomeStackParaList, 'WatchNawScreen'>;
 
@@ -27,6 +28,7 @@ const WatchNawScreen: React.FC = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: '#111827' }}>
+      <Header BackButtonShow={true} />
       {/* Video Player */}
       <View style={{ height: height / 3 }}>
         {stream_id ? (
