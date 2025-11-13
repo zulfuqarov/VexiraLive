@@ -8,7 +8,7 @@ import {
   RefreshControl,
   Alert,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import SearchInput from '../Components/SearchInput';
 import ProfileButton from '../Components/ProfileButton';
@@ -45,9 +45,22 @@ const HomeScreen = () => {
 
   const { data: populatTopVideo, refetch } = useGetVideoAll();
 
+  const [serchInput, setSerachInput] = useState('');
+
+  const SerachFilter = useMemo(() => {
+    return videosById?.filter(one =>
+      one.name.toLocaleLowerCase().includes(serchInput.toLocaleLowerCase()),
+    );
+  }, [videosById, serchInput]);
+
+
   return (
     <View style={{ flex: 1 }}>
-      <Header SearchInputShow={true} />
+      <Header
+        SearchInputShow={true}
+        serchInput={serchInput}
+        setSerachInput={setSerachInput}
+      />
       {/* Channel Categories */}
       <View style={{ marginVertical: 10 }}>
         <ScrollView
@@ -73,6 +86,7 @@ const HomeScreen = () => {
             ))}
         </ScrollView>
       </View>
+
       <KeyboardAwareScrollView
         refreshControl={
           <RefreshControl
@@ -100,11 +114,11 @@ const HomeScreen = () => {
               <FlatList
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                data={videosById}
+                data={SerachFilter}
                 keyExtractor={item => item.num.toString()}
                 contentContainerStyle={{ paddingHorizontal: 8, gap: 15 }}
                 renderItem={({ item }) => (
-                  <VideoCard videosByIdItem={videosById} item={item} />
+                  <VideoCard videosByIdItem={SerachFilter} item={item} />
                 )}
                 ListEmptyComponent={
                   isFetching ? (

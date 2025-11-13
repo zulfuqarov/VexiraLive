@@ -8,9 +8,16 @@ import { useNavigation } from '@react-navigation/native';
 interface HeaderProps {
   SearchInputShow?: boolean;
   BackButtonShow?: boolean;
+  setSerachInput?: (value: string) => void;
+  serchInput?: string;
 }
 
-const Header = ({ SearchInputShow, BackButtonShow }: HeaderProps) => {
+const Header = ({
+  SearchInputShow,
+  BackButtonShow,
+  setSerachInput,
+  serchInput,
+}: HeaderProps) => {
   const navigation = useNavigation();
 
   return (
@@ -22,7 +29,9 @@ const Header = ({ SearchInputShow, BackButtonShow }: HeaderProps) => {
         padding: 10,
       }}
     >
-      {SearchInputShow && <SearchInput />}
+      {SearchInputShow && (
+        <SearchInput serchInput={serchInput} setSerachInput={setSerachInput} />
+      )}
       {BackButtonShow && (
         <TouchableOpacity
           onPress={() => navigation.goBack()}
