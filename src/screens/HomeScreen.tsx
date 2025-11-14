@@ -53,7 +53,6 @@ const HomeScreen = () => {
     );
   }, [videosById, serchInput]);
 
-
   return (
     <View style={{ flex: 1 }}>
       <Header

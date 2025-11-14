@@ -10,7 +10,10 @@ import { VideoCategoryType, VideoType } from '../../type/ApiType/VideoType';
 const useVideoCategories = () => {
   return useQuery<VideoCategoryType[]>({
     queryKey: ['videoCategories'],
-    queryFn: GetVideoCategories,
+    queryFn: async () => {
+      const Category = await GetVideoCategories();
+      return Category.filter(one => one.category_name !== 'IPTV_GEO');
+    },
   });
 };
 
@@ -28,7 +31,9 @@ const useGetVideoAll = () => {
       const allVideos = await GetAllVideos();
 
       const shuffled = allVideos.sort(() => 0.5 - Math.random());
-      const randomTen = shuffled.slice(0, 10);
+      const randomTen = shuffled
+        .filter(one => one.category_id !== '16')
+        .slice(0, 10);
 
       return randomTen;
     },
