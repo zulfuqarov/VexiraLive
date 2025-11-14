@@ -33,7 +33,7 @@ const useGetVideoAll = () => {
     queryFn: async () => {
       const allVideos = await GetAllVideos();
 
-      const shuffled = allVideos.sort(() => 0.5 - Math.random());
+      const shuffled = [...allVideos].sort(() => 0.5 - Math.random());
       const randomTen = shuffled
         .filter(one => one.category_id !== '16')
         .slice(0, 10);

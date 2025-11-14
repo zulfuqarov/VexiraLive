@@ -9,13 +9,13 @@ const SearchScreen = () => {
   const { data: videoAll } = useGetVideoAll();
   const [serchInput, setSerachInput] = useState('');
 
-  const SerachFilter = useMemo(() => {
-    return videoAll?.allVideos.filter(one =>
-      one.name.toLocaleLowerCase().includes(serchInput.toLocaleLowerCase()),
-    );
+  const filteredVideos = useMemo(() => {
+    return videoAll?.allVideos
+      .filter(one => one.category_id !== '16')
+      .filter(one =>
+        one.name.toLocaleLowerCase().includes(serchInput.toLocaleLowerCase()),
+      );
   }, [videoAll, serchInput]);
-
-  console.log(SerachFilter);
 
   return (
     <View style={{ flex: 1 }}>
@@ -27,7 +27,7 @@ const SearchScreen = () => {
       <KeyboardAwareScrollView showsVerticalScrollIndicator={false}>
         <FlatList
           scrollEnabled={false}
-          data={SerachFilter?.filter(one => one.category_id !== '16')}
+          data={filteredVideos}
           keyExtractor={item => item.num.toString()}
           numColumns={2}
           contentContainerStyle={{ paddingHorizontal: 8, gap: 15 }}
@@ -36,7 +36,7 @@ const SearchScreen = () => {
             marginBottom: 10,
           }}
           renderItem={({ item }) => (
-            <PopularChanelCard videosByIdItem={SerachFilter} item={item} />
+            <PopularChanelCard videosByIdItem={filteredVideos} item={item} />
           )}
         />
       </KeyboardAwareScrollView>
