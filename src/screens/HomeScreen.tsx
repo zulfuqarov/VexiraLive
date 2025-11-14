@@ -46,7 +46,7 @@ const HomeScreen = () => {
 
   const {
     data: populatTopVideo,
-    refetch,
+    refetch: refetchPopularVideo,
     isFetching: popularTopLoading,
   } = useGetVideoAll();
 
@@ -98,7 +98,7 @@ const HomeScreen = () => {
             onRefresh={async () => {
               setIsPopularVideoLoading(true);
               try {
-                await refetch();
+                await refetchPopularVideo();
               } catch (error) {
                 console.log(error);
               } finally {
@@ -162,7 +162,7 @@ const HomeScreen = () => {
               </Text>
             </>
           }
-          data={populatTopVideo}
+          data={populatTopVideo?.randomVideo}
           numColumns={2}
           keyExtractor={item => item.num.toString()}
           columnWrapperStyle={{
@@ -173,7 +173,31 @@ const HomeScreen = () => {
             popularTopLoading ? (
               <PopularChanelScletion />
             ) : (
-              <PopularChanelCard videosByIdItem={populatTopVideo} item={item} />
+              <PopularChanelCard
+                videosByIdItem={populatTopVideo?.randomVideo}
+                item={item}
+              />
+            )
+          }
+          ListEmptyComponent={
+            popularTopLoading ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  gap: 15,
+                  paddingHorizontal: 8,
+                }}
+              >
+                {[1, 2, 3, 4].map(i => (
+                  <PopularChanelScletion key={i} />
+                ))}
+              </View>
+            ) : (
+              <NoVideoPlaceholder
+                message="Bu anda göstəriləcək məşhur videolar yoxdur. Yenidən cəhd edin və ya digər bölmələrə baxın."
+                onRetry={refetchPopularVideo}
+              />
             )
           }
         />

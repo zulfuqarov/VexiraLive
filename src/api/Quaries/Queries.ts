@@ -25,7 +25,10 @@ const useGetVideosByCategoryId = (categoryId: string) => {
 };
 
 const useGetVideoAll = () => {
-  return useQuery<VideoType[]>({
+  return useQuery<{
+    allVideos: VideoType[];
+    randomVideo: VideoType[];
+  }>({
     queryKey: ['VideoAll'],
     queryFn: async () => {
       const allVideos = await GetAllVideos();
@@ -35,7 +38,10 @@ const useGetVideoAll = () => {
         .filter(one => one.category_id !== '16')
         .slice(0, 10);
 
-      return randomTen;
+      return {
+        allVideos,
+        randomVideo: randomTen,
+      };
     },
   });
 };
