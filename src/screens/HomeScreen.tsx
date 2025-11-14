@@ -26,6 +26,7 @@ import VideoCardSkeleton from '../Components/VideoCardSkeleton';
 import { NoVideoPlaceholder } from '../Components/NoVideoPlaceholder';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import Header from '../Components/Header';
+import PopularChanelScletion from '../Components/PopularChanelScletion';
 
 const HomeScreen = () => {
   const [isPopularVideoLoading, setIsPopularVideoLoading] =
@@ -43,7 +44,11 @@ const HomeScreen = () => {
     isFetching,
   } = useGetVideosByCategoryId(selectedCategoryId || '');
 
-  const { data: populatTopVideo, refetch } = useGetVideoAll();
+  const {
+    data: populatTopVideo,
+    refetch,
+    isFetching: popularTopLoading,
+  } = useGetVideoAll();
 
   const [serchInput, setSerachInput] = useState('');
 
@@ -164,9 +169,13 @@ const HomeScreen = () => {
             justifyContent: 'space-between',
             marginBottom: 10,
           }}
-          renderItem={({ item }) => (
-            <PopularChanelCard videosByIdItem={populatTopVideo} item={item} />
-          )}
+          renderItem={({ item }) =>
+            popularTopLoading ? (
+              <PopularChanelScletion />
+            ) : (
+              <PopularChanelCard videosByIdItem={populatTopVideo} item={item} />
+            )
+          }
         />
       </KeyboardAwareScrollView>
     </View>
