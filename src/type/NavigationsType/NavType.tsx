@@ -14,6 +14,10 @@ export type RootProfileStackParaList = {
 
 export type RootSearchStackParaList = {
   SearchScreen: undefined;
+  WatchNawScreen: {
+    stream_id: number;
+    data: VideoType[] | undefined;
+  };
 };
 
 export type RootTabParamList = {
